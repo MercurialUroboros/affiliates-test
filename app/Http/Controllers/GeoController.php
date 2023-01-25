@@ -33,7 +33,7 @@ class GeoController extends Controller
             $usersArray[$key]->setCloseToProximity($this->getDistanceFromLatLonInKm($usersArray[$key], $edgePoint) <= $maximumDistance);
         }
 
-        // Filtering by who
+        // Filtering by who is eligible for the proximity check
         $usersCloseToProximity = array_filter($usersArray, function ($item) {
             return $item->getIsCloseToProximity() === true;
         });
