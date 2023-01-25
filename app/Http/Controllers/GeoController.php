@@ -23,7 +23,6 @@ class GeoController extends Controller
 
     public function fetchUsersByProximity(GeoPoint $edgePoint, float $maximumDistance)
     {
-        $dublinGeoPoint = new GeoPoint(53.3340285,-6.2535495);
         $usersFile = Storage::disk('local')->get('users.txt');
 
         $usersArray = [];
