@@ -34,4 +34,10 @@ class User extends GeoPoint
         return $this->is_close_to_dublin;
     }
 
+    
+    public function __toString()
+    {
+        return "{\"name\": \"$this->name\", \"affiliate_id\": \"$this->affiliate_id\", \"latitude\": \"$this->latitude\", \"longitude\": \"$this->longitude\" }";
+    }
+
   }
