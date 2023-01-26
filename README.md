@@ -24,4 +24,4 @@ docker run --rm \
     laravelsail/php82-composer:latest \
     composer install --ignore-platform-reqs
 
-sail up
+./vendor/bin/sail up
