@@ -5,26 +5,25 @@ use App\Services\Affiliate;
 
 const EARTH_RADIUS = 6371;
 
+/**
+ * @param float deg Degree we want to transfrom into radians
+ */
 if (!function_exists('convertDegToRad')) {
-    function convertDegToRad(float $deg)
+    function convertDegToRad(float $deg):float
     {
         return ($deg * pi()) / 180;
     }
 }
 
 /**
- * Parse the give path as array json and return an array or array
+ * Calculate distance in KM from one geopoint to another
  *
- * @param float  $latFrom
- * @param float  $lngFrom
- * @param float  $latTo
- * @param float  $lngTo
- * @param int  $radius
- *
- * @return array
+ * @param GeoPoint fromPoint
+ * @param GeoPoint toPoint
+ * @return int
  */
 if (!function_exists('getDistanceFromLatLonInKm')) {
-    function getDistanceFromLatLonInKm(GeoPoint $point1, GeoPoint $point2)
+    function getDistanceFromLatLonInKm(GeoPoint $point1, GeoPoint $point2): float
     {
         $lat1 = $point1->getLatitude();
         $lat2 = $point2->getLatitude();
@@ -42,30 +41,37 @@ if (!function_exists('getDistanceFromLatLonInKm')) {
     }
 }
 
-if (!function_exists('fetchUsersByProximity')) {
-    function fetchUsersByProximity(string $file, GeoPoint $edgePoint, float $maximumDistance)
+/**
+ * Given a file with json formatted strings, following the Affiliate properties, divided by breakline
+ * Will parse the file, and filter the affiliates by proximity and sorted by ID
+ *
+ * @param string input file
+ * @param GeoPoint edgePoint (the point we would like to calculate the distance from)
+ * @return float maximumDistance allowed distance from the edgePoint
+ */
+if (!function_exists('fetchAffiliatesByProximity')) {
+    function fetchAffiliatesByProximity(string $file, GeoPoint $edgePoint, float $maximumDistance): array
     {
-        $usersArray = [];
-
-
+        $affiliatesArray = [];
 
         foreach (explode("\n", $file) as $key => $line) {
             $jsonUser = json_decode($line);
-            if(is_null($jsonUser))continue;
-            $usersArray[$key] = new Affiliate($jsonUser->name, $jsonUser->affiliate_id, $jsonUser->latitude, $jsonUser->longitude);
-            $usersArray[$key]->setCloseToProximity(getDistanceFromLatLonInKm($usersArray[$key], $edgePoint) <= $maximumDistance);
+            if (is_null($jsonUser)) {
+                continue;
+            }
+            $affiliatesArray[$key] = new Affiliate($jsonUser->name, $jsonUser->affiliate_id, $jsonUser->latitude, $jsonUser->longitude);
+            $affiliatesArray[$key]->setCloseToProximity(getDistanceFromLatLonInKm($affiliatesArray[$key], $edgePoint) <= $maximumDistance);
         }
 
-        
         // Filtering by who is eligible for the proximity check
-        $usersCloseToProximity = array_filter($usersArray, function ($item) {
+        $affiliatesCloseToProximity = array_filter($affiliatesArray, function ($item) {
             return $item->getIsCloseToProximity() === true;
         });
 
-        usort($usersCloseToProximity, function ($x, $y) {
+        usort($affiliatesCloseToProximity, function ($x, $y) {
             return $x->getAffiliateId() - $y->getAffiliateId();
         });
 
-        return $usersCloseToProximity;
+        return $affiliatesCloseToProximity;
     }
 }

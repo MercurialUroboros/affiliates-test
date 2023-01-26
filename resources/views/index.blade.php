@@ -34,14 +34,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($users as $user)
+                    @foreach ($affiliates as $affiliate)
                         <tr class="border-b dark:bg-gray-900 dark:border-gray-700 {{$loop->index %2 ===0 ? "bg-white" : "bg-gray"}}">
                             <th scope="row"
                                 class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                {{ $user->getName() }}
+                                {{ $affiliate->getName() }}
                             </th>
                             <td class="px-6 py-4">
-                                {{ $user->getAffiliateId() }}
+                                {{ $affiliate->getAffiliateId() }}
                             </td>
                         </tr>
                     @endforeach

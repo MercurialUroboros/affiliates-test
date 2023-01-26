@@ -17,72 +17,74 @@ class GeoControllerTest extends TestCase
     protected $maximumDistance = 100;
     protected $dublinGeoPoint;
     /**
-     * Test users not in range of distance.
+     * Test affiliates not in range of distance.
      *
      * @return void
      */
     public function test_user_not_in_range()
     {
-        $usersNotInRange = fetchUsersByProximity($this->createRandomUsersFileNotInRange(), $this->dublinGeoPoint, $this->maximumDistance);
-        $this->assertTrue(count($usersNotInRange) == 0);
+        $affiliatesNotInRange = fetchAffiliatesByProximity($this->createRandomAffiliatesFileNotInRange(), $this->dublinGeoPoint, $this->maximumDistance);
+        $this->assertTrue(count($affiliatesNotInRange) == 0);
     }
 
     /**
-     * Test users in range of distance.
+     * Test affiliates in range of distance.
      *
      * @return void
      */
-    public function test_user_in_range()
+    public function test_affiliates_in_range()
     {
-        $usersInRange = fetchUsersByProximity($this->createRandomUsersFileInRange(), $this->dublinGeoPoint, $this->maximumDistance);
+        $affiliatesInRange = fetchAffiliatesByProximity($this->createRandomAffiliatesFileInRange(), $this->dublinGeoPoint, $this->maximumDistance);
 
-        $this->assertTrue(count($usersInRange) == 10);
+        $this->assertTrue(count($affiliatesInRange) == 10);
     }
 
     /**
-     * Test users from file
+     * Test affiliates from file
      *
      * @return void
      */
     public function test_file_affiliates()
     {
-        $usersFile = Storage::disk('local')->get('affiliates-data/affiliates.txt');
+        $affiliatesFile = Storage::disk('local')->get('affiliates-data/affiliates.txt');
 
-        $usersInRange = fetchUsersByProximity($usersFile, $this->dublinGeoPoint, $this->maximumDistance);
+        $affiliatesInRange = fetchAffiliatesByProximity($affiliatesFile, $this->dublinGeoPoint, $this->maximumDistance);
 
-        $this->assertTrue(count($usersInRange) == 16);
+        $this->assertTrue(count($affiliatesInRange) == 16);
     }
 
     /**
-     * Creating users with an arbitrary big latitude/longitude so not to fall within 100km
+     * Creating affiliates with an arbitrary big latitude/longitude so not to fall within 100km
+     * @return string The formatted string, with affiliates divided by break-line
      */
-    public function createRandomUsersFileNotInRange()
+    public function createRandomAffiliatesFileNotInRange()
     {
-        $usersString = '';
+        $affiliatesString = '';
 
         for ($x = 0; $x <= 10; $x++) {
-            $randomUser = new Affiliate(Str::random($strlentgh = 16), (string) rand(2, 50), (mt_rand() * 100) / mt_getrandmax(), (mt_rand() * 100) / mt_getrandmax());
-            $usersString .= $randomUser->__toString() . "\r\n";
+            $randomAffiliate = new Affiliate(Str::random($strlentgh = 16), (string) rand(2, 50), (mt_rand() * 100) / mt_getrandmax(), (mt_rand() * 100) / mt_getrandmax());
+            $affiliatesString .= $randomAffiliate->__toString() . "\r\n";
         }
 
-        return $usersString;
+        return $affiliatesString;
     }
 
     /**
-     * Generating 10 users always in range
+     * Generating 10 affiliates always in range
+     * @return string The formatted string, with affiliates always in range from dublin divided by break-line
      */
-    public function createRandomUsersFileInRange()
+    public function createRandomAffiliatesFileInRange()
     {
-        $usersString = '';
+        $affilatesString = '';
 
         for ($x = 0; $x < 10; $x++) {
             $latitude = mt_rand(53.0 * 10, 53.9 * 10) / 10;
             $longitude = mt_rand(-6.9 * 10, -6.0 * 10) / 10;
-            $randomUser = new Affiliate(Str::random($strlentgh = 16), (string) rand(2, 50), $latitude, $longitude);
-            $usersString .= $randomUser->__toString() . "\r\n";
+            $randomAffiliate = new Affiliate(Str::random($strlentgh = 16), (string) rand(2, 50), $latitude, $longitude);
+            $affilatesString .= $randomAffiliate->__toString() . "\r\n";
         }
 
-        return $usersString;
+        return $affilatesString;
     }
 
     protected function setUp() : void {
