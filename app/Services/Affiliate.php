@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Classes;
-use App\Classes\GeoPoint;
+namespace App\Services;
+use App\Services\GeoPoint;
 
-class User extends GeoPoint
+class Affiliate extends GeoPoint
 {
     protected string $name;
     protected string $affiliate_id;

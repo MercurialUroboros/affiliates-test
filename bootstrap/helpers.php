@@ -1,7 +1,7 @@
 <?php
 
-use App\Classes\GeoPoint;
-use App\Classes\User;
+use App\Services\GeoPoint;
+use App\Services\Affiliate;
 
 const EARTH_RADIUS = 6371;
 
@@ -52,7 +52,7 @@ if (!function_exists('fetchUsersByProximity')) {
         foreach (explode("\n", $file) as $key => $line) {
             $jsonUser = json_decode($line);
             if(is_null($jsonUser))continue;
-            $usersArray[$key] = new User($jsonUser->name, $jsonUser->affiliate_id, $jsonUser->latitude, $jsonUser->longitude);
+            $usersArray[$key] = new Affiliate($jsonUser->name, $jsonUser->affiliate_id, $jsonUser->latitude, $jsonUser->longitude);
             $usersArray[$key]->setCloseToProximity(getDistanceFromLatLonInKm($usersArray[$key], $edgePoint) <= $maximumDistance);
         }
 

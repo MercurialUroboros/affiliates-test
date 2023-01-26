@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Classes\GeoPoint;
-use App\Classes\User;
+use App\Services\GeoPoint;
+use App\Services\Affiliate;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -61,7 +61,7 @@ class GeoControllerTest extends TestCase
         $usersString = '';
 
         for ($x = 0; $x <= 10; $x++) {
-            $randomUser = new User(Str::random($strlentgh = 16), (string) rand(2, 50), (mt_rand() * 100) / mt_getrandmax(), (mt_rand() * 100) / mt_getrandmax());
+            $randomUser = new Affiliate(Str::random($strlentgh = 16), (string) rand(2, 50), (mt_rand() * 100) / mt_getrandmax(), (mt_rand() * 100) / mt_getrandmax());
             $usersString .= $randomUser->__toString() . "\r\n";
         }
 
@@ -78,7 +78,7 @@ class GeoControllerTest extends TestCase
         for ($x = 0; $x < 10; $x++) {
             $latitude = mt_rand(53.0 * 10, 53.9 * 10) / 10;
             $longitude = mt_rand(-6.9 * 10, -6.0 * 10) / 10;
-            $randomUser = new User(Str::random($strlentgh = 16), (string) rand(2, 50), $latitude, $longitude);
+            $randomUser = new Affiliate(Str::random($strlentgh = 16), (string) rand(2, 50), $latitude, $longitude);
             $usersString .= $randomUser->__toString() . "\r\n";
         }
 

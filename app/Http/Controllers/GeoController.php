@@ -2,8 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Classes\GeoPoint;
-use App\Classes\User;
+use App\Services\GeoPoint;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log;
