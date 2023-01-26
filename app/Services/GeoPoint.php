@@ -1,8 +1,9 @@
 <?php
 
 namespace App\Services;
+use App\Services\GeoContract;
 
-class GeoPoint
+class GeoPoint implements GeoContract
 {
     protected float $latitude;
     protected float $longitude;
@@ -13,17 +14,17 @@ class GeoPoint
         $this->longitude = $longitude;
     }
 
-    public function getLatitude()
+    public function getLatitude(): float
     {
         return $this->latitude;
     }
 
-    public function getLongitude()
+    public function getLongitude(): float
     {
         return $this->longitude;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return "{latitude: {$this->latitude}, longitude: {$this->longitude}}";
     }
