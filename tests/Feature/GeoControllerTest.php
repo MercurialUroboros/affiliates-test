@@ -11,11 +11,11 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-$dublinGeoPoint = new GeoPoint(53.3340285, -6.2535495);
-$maximumDistance = 100;
 
 class GeoControllerTest extends TestCase
 {
+    protected $maximumDistance = 100;
+    protected $dublinGeoPoint;
     /**
      * Test users not in range of distance.
      *
@@ -23,9 +23,7 @@ class GeoControllerTest extends TestCase
      */
     public function test_user_not_in_range()
     {
-        global $dublinGeoPoint;
-        global $maximumDistance;
-        $usersNotInRange = fetchUsersByProximity($this->createRandomUsersFileNotInRange(), $dublinGeoPoint, $maximumDistance);
+        $usersNotInRange = fetchUsersByProximity($this->createRandomUsersFileNotInRange(), $this->dublinGeoPoint, $this->maximumDistance);
         $this->assertTrue(count($usersNotInRange) == 0);
     }
 
@@ -36,9 +34,7 @@ class GeoControllerTest extends TestCase
      */
     public function test_user_in_range()
     {
-        global $dublinGeoPoint;
-        global $maximumDistance;
-        $usersInRange = fetchUsersByProximity($this->createRandomUsersFileInRange(), $dublinGeoPoint, $maximumDistance);
+        $usersInRange = fetchUsersByProximity($this->createRandomUsersFileInRange(), $this->dublinGeoPoint, $this->maximumDistance);
 
         $this->assertTrue(count($usersInRange) == 10);
     }
@@ -50,11 +46,9 @@ class GeoControllerTest extends TestCase
      */
     public function test_file_affiliates()
     {
-        global $dublinGeoPoint;
-        global $maximumDistance;
         $usersFile = Storage::disk('local')->get('affiliates-data/affiliates.txt');
 
-        $usersInRange = fetchUsersByProximity($usersFile, $dublinGeoPoint, $maximumDistance);
+        $usersInRange = fetchUsersByProximity($usersFile, $this->dublinGeoPoint, $this->maximumDistance);
 
         $this->assertTrue(count($usersInRange) == 16);
     }
@@ -89,5 +83,10 @@ class GeoControllerTest extends TestCase
         }
 
         return $usersString;
+    }
+
+    protected function setUp() : void {
+        parent::setUp();
+        $this->dublinGeoPoint = new GeoPoint(53.3340285, -6.2535495);
     }
 }
