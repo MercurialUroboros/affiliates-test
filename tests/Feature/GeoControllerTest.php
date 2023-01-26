@@ -14,8 +14,21 @@ use Illuminate\Support\Str;
 
 class GeoControllerTest extends TestCase
 {
+    /**
+     * Maxium distance from the geoPoint in KM
+     */
     protected $maximumDistance = 100;
+    
+    /**
+     * Dublin latitude/longitue expressed as GeoPoint
+     */
     protected $dublinGeoPoint;
+
+    protected function setUp() : void {
+        parent::setUp();
+        $this->dublinGeoPoint = new GeoPoint(53.3340285, -6.2535495);
+    }
+
     /**
      * Test affiliates not in range of distance.
      *
@@ -85,10 +98,5 @@ class GeoControllerTest extends TestCase
         }
 
         return $affilatesString;
-    }
-
-    protected function setUp() : void {
-        parent::setUp();
-        $this->dublinGeoPoint = new GeoPoint(53.3340285, -6.2535495);
     }
 }
